@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="EMP_INFO")
@@ -25,6 +26,9 @@ public class Employee {
     
     @Min(value=18, message="Age must be atleast 18")
     private int age;
+    
+    @Size(min = 6, message = "Password must be at least 6 characters")
+    private String password;
 
 
     public Long getId() {return id;}
@@ -38,4 +42,7 @@ public class Employee {
     
     public int getAge() {return age;}
     public void setAge(int age) {this.age = age;}
+    
+    public String getPassword() {return password;}
+    public void setPassword(String password) {this.password = password;}
 }

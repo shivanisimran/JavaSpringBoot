@@ -3,33 +3,42 @@ package com.example.employee;
 import com.example.employee.Employee;
 import com.example.employee.EmployeeRepository;
 import com.example.employee.exception.ResourceNotFoundException;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
    private final EmployeeRepository employeeRepository ;
-   
-   public EmployeeService(EmployeeRepository employeeRepository) {
-	   this.employeeRepository = employeeRepository; 
+  
+   private final ModelMapper modelMapper;
+     
+   public EmployeeService(EmployeeRepository employeeRepository,ModelMapper modelMapper) {
+	   this.employeeRepository = employeeRepository;
+	   this.modelMapper = modelMapper;
    }
    
    public List<Employee> getAllEmployees(){
 	   return employeeRepository.findAll();
    }
    
-   public Employee getEmployeeById(Long id) {
-	   return employeeRepository.findById(id)
-			  .orElseThrow(()->new ResourceNotFoundException("Employee not found with id " + id) );
+   public EmployeeDTO getEmployeeById(Long id) {
+	   Employee employee = employeeRepository.findById(id).get();
+	   EmployeeDTO employeeDto = this.modelMapper.map(employee, EmployeeDTO.class);
+	   return employeeDto;
+	   
    }
    
    public Employee createEmployee(Employee employee) {
 	   return employeeRepository.save(employee);
    }
    
-   public Employee udateEmployee(Long id, Employee updatedEmployee) {
-	   Employee existingEmployee = getEmployeeById(id);
+   public EmployeeDTO udateEmployee(Long id, Employee updatedEmployee) {
+	   EmployeeDTO existingEmployee = getEmployeeById(id);
 	   existingEmployee.setName(updatedEmployee.getName());
 	   existingEmployee.setAge(updatedEmployee.getAge());
 	   existingEmployee.setEmail(updatedEmployee.getEmail());
@@ -38,7 +47,7 @@ public class EmployeeService {
    }
    
    public void deleteEmployee(Long id) {
-	   Employee existingEmployee = getEmployeeById(id);
+	   Employee existingEmployee = employeeRepository.findById(id).get();
 	   employeeRepository.delete(existingEmployee);
    }
    

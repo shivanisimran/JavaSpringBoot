@@ -28,7 +28,7 @@ public class EmployeeController {
    }
    
    @GetMapping("/{id}")
-   public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id){
+   public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id){
 	   return new ResponseEntity<>(employeeservice.getEmployeeById(id),HttpStatus.OK);
    }
    
@@ -38,7 +38,7 @@ public class EmployeeController {
    }
    
    @PutMapping("/{id}")
-   public ResponseEntity<Employee>udateEmployee(@PathVariable Long id,@Valid @RequestBody Employee employee){
+   public ResponseEntity<EmployeeDTO>udateEmployee(@PathVariable Long id,@Valid @RequestBody Employee employee){
 	   return new ResponseEntity<>(employeeservice.udateEmployee(id, employee),HttpStatus.OK);
    }
    
